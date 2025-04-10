@@ -94,6 +94,15 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "noBuild": true,
+            "baseHref": "/idle3/",
+            "name": "workflow",
+            "email": "workflow@example.org"
+          }
         }
       }
     }
