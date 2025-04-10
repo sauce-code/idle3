@@ -57,6 +57,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "servePath": "/idle3/"
+          },
           "configurations": {
             "production": {
               "buildTarget": "idle3:build:production"
