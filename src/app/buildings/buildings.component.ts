@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {DataService} from '../data.service';
+import {ModelService} from '../model.service';
+import {ControllerService} from '../controller.service';
 
 @Component({
   selector: 'app-buildings',
@@ -10,7 +11,8 @@ import {DataService} from '../data.service';
 export class BuildingsComponent {
 
   constructor(
-    protected dataService: DataService
+    protected modelService: ModelService,
+    protected controllerService: ControllerService,
   ) {
   }
 

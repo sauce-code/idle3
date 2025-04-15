@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {DataService} from '../data.service';
+import {Component} from '@angular/core';
+import {ModelService} from '../model.service';
 
 @Component({
   selector: 'app-resources',
@@ -7,16 +7,11 @@ import {DataService} from '../data.service';
   templateUrl: './resources.component.html',
   styleUrl: './resources.component.css'
 })
-export class ResourcesComponent implements OnInit {
-  protected res?: number;
+export class ResourcesComponent {
 
   constructor(
-    protected dataService: DataService
+    protected modelService: ModelService,
   ) {
-  }
-
-  ngOnInit(): void {
-    setInterval(() => this.dataService.refresh(), 1000);
   }
 
 }
