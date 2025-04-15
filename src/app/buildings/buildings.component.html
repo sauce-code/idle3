@@ -1,0 +1,3 @@
+<p>Building Level: {{ modelService.level }}</p>
+<p>Upgrade Cost: {{ modelService.upgradeCost.toFixed(0) }}</p>
+<button type="button" [disabled]="modelService.upgradeDisabled" (click)="controllerService.upgrade()">upgrade</button>
