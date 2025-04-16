@@ -6,18 +6,24 @@ import Castle from '../../domain/Castle';
 })
 export class CastleRepositoryService {
 
-  public static readonly KEY = 'castle';
+  private static readonly KEY = 'castle';
 
-  public get(): Castle | null {
-    const json = localStorage.getItem(CastleRepositoryService.KEY);
-    return json === null
-      ? null
-      : this.parse(json);
+  private static path(id: string): string {
+    return `${CastleRepositoryService.KEY}/${id}`;
+  }
+
+  public get(id: string): Castle | null {
+    const path = CastleRepositoryService.path(id);
+    const json = localStorage.getItem(path);
+    return json
+      ? this.parse(json)
+      : null;
   }
 
   private parse(json: string): Castle {
     const obj = JSON.parse(json);
     return new Castle(
+      obj.id,
       new Date(obj.startDate),
       new Date(obj.lastUpdate),
       obj.resources,
@@ -27,11 +33,12 @@ export class CastleRepositoryService {
 
   public save(castle: Castle): void {
     const json = JSON.stringify(castle);
-    localStorage.setItem(CastleRepositoryService.KEY, json);
+    localStorage.setItem(CastleRepositoryService.path(castle.id), json);
   }
 
-  public reset() {
-    localStorage.clear();
+  delete(id: string) {
+    const path = CastleRepositoryService.path(id);
+    localStorage.removeItem(path);
   }
 
 }

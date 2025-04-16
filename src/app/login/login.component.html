@@ -1,0 +1,17 @@
+<p>login User:</p>
+<div>
+  @for (name of userService.users.keys(); track $index) {
+    <div>
+      User {{ name }}
+      <button type="button" (click)="login(name)">login</button>
+      <button type="button" (click)="deleteUser(name)">delete</button>
+    </div>
+  }
+</div>
+<p>Create User:</p>
+<div>
+  <label for="player-name">Name: </label>
+  <input id="player-name" [(ngModel)]="name" placeholder="Name">
+  <button type="button" (click)="createUser()">create</button>
+</div>
+
