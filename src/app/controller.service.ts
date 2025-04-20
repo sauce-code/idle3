@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ModelService} from './model.service';
 import {NativeService} from './logic/framework/in/native.service';
+import GameView from './logic/framework/in/GameView';
 
 @Injectable({
   providedIn: 'root'
@@ -11,34 +12,34 @@ export class ControllerService {
     private modelService: ModelService,
     private nativeService: NativeService,
   ) {
-    const response = this.nativeService.get();
+  }
+
+  public get(): void {
+    const response = this.nativeService.get(this.modelService.playerId);
     this.updateModel(response);
   }
 
   public upgrade(): void {
     console.log("upgrade");
-    const response = this.nativeService.upgrade();
+    const response = this.nativeService.upgrade(this.modelService.playerId);
     if (response) {
       this.updateModel(response);
     }
   }
 
-  private updateModel(response: string) {
-    console.log(response);
-    const obj = JSON.parse(response);
-    this.modelService.startDate = new Date(obj.startDate);
-    this.modelService.lastUpdate = new Date(obj.lastUpdate);
-    this.modelService.res = obj.res;
-    this.modelService.level = obj.level;
-    this.modelService.income = obj.income;
-    this.modelService.upgradeCost = obj.upgradeCost;
+  private updateModel(view: GameView) {
+    console.log(view);
+    this.modelService.startDate = new Date(view.startDate);
+    this.modelService.lastUpdate = new Date(view.lastUpdate);
+    this.modelService.res = view.res;
+    this.modelService.level = view.level;
+    this.modelService.income = view.income;
+    this.modelService.upgradeCost = view.upgradeCost;
     this.modelService.refresh();
   }
 
-  public reset() {
-    console.log("reset");
-    const response = this.nativeService.reset();
-    this.updateModel(response);
+  public delete(playerId: string) {
+    this.nativeService.delete(playerId);
   }
 
 }

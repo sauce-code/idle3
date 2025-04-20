@@ -1,6 +1,6 @@
 <h1>Idle3</h1>
-<app-resources></app-resources>
-<nav>
+<app-resources *ngIf="modelService.playerId"></app-resources>
+<nav *ngIf="modelService.playerId">
   <a class="button"
      routerLink="/dashboard"
      routerLinkActive="activebutton"
@@ -24,6 +24,8 @@
      routerLinkActive="activebutton"
      ariaCurrentWhenActive="page">
     Options
-  </a>
+  </a> |
+  <button type="button" (click)="modelService.clear()">logout</button>
 </nav>
-<router-outlet></router-outlet>
+<app-login *ngIf="!modelService.playerId"></app-login>
+<router-outlet *ngIf="modelService.playerId"></router-outlet>

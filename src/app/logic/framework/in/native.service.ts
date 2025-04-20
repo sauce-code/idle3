@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ApplicationService} from '../../application/application.service';
 import GameView from './GameView';
-import Castle from '../../domain/Castle';
 
 @Injectable({
   providedIn: 'root'
@@ -13,33 +12,20 @@ export class NativeService {
   ) {
   }
 
-  public get(): string {
-    const castle = this.applicationService.get();
-    return this.parse(castle);
+  public get(id: string): GameView {
+    const castle = this.applicationService.get(id);
+    return GameView.of(castle);
   }
 
-  public upgrade(): string | undefined {
-    const castle = this.applicationService.upgrade();
+  public delete(playerId: string): boolean {
+    return this.applicationService.delete(playerId);
+  }
+
+  public upgrade(id: string): GameView | undefined {
+    const castle = this.applicationService.upgrade(id);
     return castle
-      ? this.parse(castle)
+      ? GameView.of(castle)
       : undefined;
-  }
-
-  public reset(): string {
-    const castle = this.applicationService.reset();
-    return this.parse(castle);
-  }
-
-  private parse(castle: Castle): string {
-    const gameView = new GameView(
-      castle.startDate,
-      castle.lastUpdate,
-      castle.resources,
-      castle.level,
-      castle.income,
-      castle.upgradeCost,
-    );
-    return JSON.stringify(gameView);
   }
 
 }

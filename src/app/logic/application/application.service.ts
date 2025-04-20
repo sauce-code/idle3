@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
 import {CastleRepositoryService} from '../framework/out/castle-repository.service';
 import Castle from '../domain/Castle';
+import {PlayerRepositoryService} from '../framework/out/player-repository.service';
+import Player from '../domain/Player';
+import {v4} from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -8,21 +11,54 @@ import Castle from '../domain/Castle';
 export class ApplicationService {
 
   constructor(
-    private castleRepositoryService: CastleRepositoryService
+    private readonly playerRepository: PlayerRepositoryService,
+    private readonly castleRepositoryService: CastleRepositoryService,
   ) {
   }
 
-  public get(): Castle {
-    const castle = this.castleRepositoryService.get();
-    return castle
-      ? castle
-      : this.init();
+  // TODO create player method
+
+  public get(id: string): Castle {
+    const player = this.playerRepository.get(id);
+    if (!player) {
+      const uuid = v4();
+      const newCastle = Castle.create(uuid);
+      this.castleRepositoryService.save(newCastle);
+      const newPlayer = new Player(id, newCastle.id);
+      this.playerRepository.save(newPlayer);
+      return newCastle;
+    }
+    const castle = this.castleRepositoryService.get(player.castle);
+    if (!castle) {
+      const uuid = v4();
+      const newCastle = Castle.create(uuid);
+      this.castleRepositoryService.save(newCastle);
+      return newCastle;
+    }
+    return castle;
   }
 
-  public upgrade(): Castle | undefined {
-    const castle = this.castleRepositoryService.get();
+  public delete(playerId: string): boolean {
+    const player = this.playerRepository.get(playerId);
+    if (!player) {
+      return false;
+    }
+    const castle = this.castleRepositoryService.get(player.castle);
+    if (castle) {
+      this.castleRepositoryService.delete(player.castle);
+    }
+    this.playerRepository.delete(playerId);
+    return true;
+  }
+
+  public upgrade(id: string): Castle | undefined {
+    const player = this.playerRepository.get(id);
+    if (!player) {
+      throw new Error(`No Player ${id} found.`);
+    }
+    const castle = this.castleRepositoryService.get(player.castle);
     if (!castle) {
-      throw new Error('No Castle');
+      throw new Error(`No Castle ${player.castle} found.`);
     }
     castle.update();
     const success = castle.upgrade();
@@ -31,17 +67,6 @@ export class ApplicationService {
     }
     this.castleRepositoryService.save(castle);
     return castle;
-  }
-
-  public reset() {
-    this.castleRepositoryService.reset();
-    return this.init();
-  }
-
-  private init(): Castle {
-    const newCastle = Castle.create();
-    this.castleRepositoryService.save(newCastle);
-    return newCastle;
   }
 
 }

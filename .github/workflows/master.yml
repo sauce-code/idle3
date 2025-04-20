@@ -10,7 +10,7 @@ jobs:
   all:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Check Out
         uses: actions/checkout@v4
 
       - name: Setup Chrome

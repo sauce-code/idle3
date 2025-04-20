@@ -1,6 +1,7 @@
 export default class Castle {
 
   constructor(
+    public readonly id: string,
     public startDate: Date,
     public lastUpdate: Date,
     public resources: number,
@@ -32,8 +33,8 @@ export default class Castle {
     return 1.1 ** this.level;
   }
 
-  public static create(): Castle {
-    return new Castle(new Date(), new Date(), 1_000, 1);
+  public static create(id: string): Castle {
+    return new Castle(id, new Date(), new Date(), 1_000, 1);
   }
 
 }

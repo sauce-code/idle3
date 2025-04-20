@@ -14,4 +14,5 @@ export class OptionsComponent {
   ) {
   }
 
+  protected readonly localStorage = localStorage;
 }
